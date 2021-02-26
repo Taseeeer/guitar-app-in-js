@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: monospace;
+            --color: firebrick;
+        }
+
+        .logo{
+            font-size: 2rem;
+            background: var(--color);
+            color: white;
+            width: 25%;
+            margin: .5rem auto;
+            padding: 1rem;
+            text-align: center;
+            transform: skew(-5deg) rotate(-3deg);
+            
+        }
+
+        .container{
+            width: 75%;
+            margin: auto;
+            padding: 1rem;
+            background: rgb(7, 144, 207);
+            font-size: 1.5rem;
+        }
+
+        .controls{
+            background-color: yellow;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .c{
+            background-color: rgb(194, 78, 58);
+            color: white;
+            padding: 1.2rem;
+            margin: .5rem;
+            transform: skew(-7deg);
+            text-align: center;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .played{
+            transform: skew(-7deg) scale(1.1);
+            color: black;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h2 class="logo">Your digital Guitar</h2>
+
+    <div class="container">
+        <div class="controls">
+            <p data-key="69" class="c key">E</p>
+            <p data-key="65" class="c key">A</p>
+            <p data-key="68" class="c key">D</p>
+            <p data-key="71" class="c key">G</p>
+            <p data-key="66" class="c key">B</p>
+            <p data-key="69" class="c key">E</p>
+        </div>
+    </div>
+
+
+    <audio data-key="69" src="strings/es.mp3"></audio>
+    <audio data-key="65" src="strings/as.mp3"></audio>
+    <audio data-key="68" src="strings/ds.mp3"></audio>
+    <audio data-key="71" src="strings/gs.mp3"></audio>
+    <audio data-key="66" src="strings/bs.mp3"></audio>
+    <audio data-key="69" src="strings/es.mp3"></audio>
+
+
+    <script>
+
+
+        const playIt = e => {
+            //e.key === "a" ? chords.classList.add("played") : "";
+
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            const chords = document.querySelector(`.c[data-key="${e.keyCode}"]`);
+        
+            if(!audio) return;
+            audio.currentTime = 0;
+            audio.play();
+            
+            chords.classList.add("played");
+        }
+        
+        function removeStuff(e){
+            if(e.propertyName !== "transform") return;
+
+            e.target.classList.remove("played");
+        }
+
+        const allKeys = Array.from(document.querySelectorAll(".key"));
+        //console.log(allKeys);
+        allKeys.forEach(key => key.addEventListener("transitionend", removeStuff));
+
+        window.addEventListener("keydown", playIt);
+
+    </script>
+    
+</body>
+</html>
